@@ -1,25 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+
+// import screens
+import LoginScreen from './Components/Screens/LoginScreen';
+import SignUpScreen from './Components/Screens/SignUpScreen';
+import ForgotPasswordScreen from './Components/Screens/ForgotPasswordScreen';
+import NotFoundScreen from './Components/Screens/NotFoundScreen';
+
+// import app-color
+import { APP_COLOR } from './constants/app';
+
+const appTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: APP_COLOR
+    }
+  }
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <ThemeProvider theme={appTheme}>
+        <Switch>
+          <Route exact path='/' component={LoginScreen} />
+          <Route exact path='/sign-up' component={SignUpScreen} />
+          <Route
+            exact
+            path='/forgot-password'
+            component={ForgotPasswordScreen}
+          />
+          <Route component={NotFoundScreen} />
+        </Switch>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 
