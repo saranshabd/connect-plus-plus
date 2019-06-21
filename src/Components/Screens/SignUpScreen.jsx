@@ -7,6 +7,14 @@ import Container from '@material-ui/core/Container';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+// import redux actions
+import {
+  signUpAction,
+  signUpVerifyAction
+} from '../../store/actions/authActions';
 
 // import components
 import LoginHeader from '../Layouts/Headers/LoginHeader';
@@ -199,8 +207,37 @@ class SignUpScreen extends Component {
       )
         return;
 
-      // send the OTP
-      this.setState({ isOtpSent: true, buttonTitle: 'Confirm OTP' });
+      // send the OTP to the user email id
+      this.props
+        .signUpAction(firstname, lastname, regno, password)
+        .then(() => {
+          this.setState({ isOtpSent: true, buttonTitle: 'Confirm OTP' });
+        })
+        .catch(() => {
+          let { message } = this.props;
+          if ('User already registered' === message) {
+            this.setState({
+              isFirstnameError: true,
+              isLastnameError: true,
+              isRegnoError: true,
+              firstnameError: message,
+              lastnameError: message,
+              regnoError: message
+            });
+            setTimeout(() => {
+              this.setState({
+                isFirstnameError: false,
+                isLastnameError: false,
+                isRegnoError: false,
+                firstnameError: null,
+                lastnameError: null,
+                regnoError: null
+              });
+            }, 3000);
+          } else {
+            alert(message);
+          }
+        });
     } else {
       const { otp } = this.state;
 
@@ -212,13 +249,36 @@ class SignUpScreen extends Component {
         });
       }
 
-      this.setState({ isOtpVerified: true, isOtpError: false, otpError: null });
-      setTimeout(() => {
-        this.setState({
-          isOtpVerified: false
+      // send OTP to the server to verify
+      this.props
+        // user account created successfully
+        .signUpVerifyAction(this.props.signUpAccessToken, otp)
+        .then(() => {
+          this.setState({
+            isOtpVerified: true,
+            isOtpError: false,
+            otpError: null
+          });
+          setTimeout(() => {
+            this.setState({
+              isOtpVerified: false
+            });
+            this.props.history.push('/home');
+          }, 2000);
+        })
+        .catch(() => {
+          // authentication failed
+          this.setState({
+            isOtpError: true,
+            otpError: this.props.message
+          });
+          setTimeout(() => {
+            this.setState({
+              isOtpError: false,
+              otpError: null
+            });
+          }, 3000);
         });
-        this.props.history.push('/home');
-      }, 2000);
     }
   };
 
@@ -380,4 +440,20 @@ class SignUpScreen extends Component {
   }
 }
 
-export default SignUpScreen;
+SignUpScreen.propTypes = {
+  signUpAction: PropTypes.func.isRequired,
+  signUpStatus: PropTypes.bool.isRequired,
+  message: PropTypes.string.isRequired,
+  signUpAccessToken: PropTypes.string.isRequired
+};
+
+const mapStateToProps = state => ({
+  signUpStatus: state.auth.signUpStatus,
+  message: state.auth.message,
+  signUpAccessToken: state.auth.signUpAccessToken
+});
+
+export default connect(
+  mapStateToProps,
+  { signUpAction, signUpVerifyAction }
+)(SignUpScreen);

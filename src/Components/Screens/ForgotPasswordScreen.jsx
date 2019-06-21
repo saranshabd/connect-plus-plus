@@ -7,19 +7,28 @@ import Container from '@material-ui/core/Container';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+// import redux actions
+import {
+  forgotPasswordAction,
+  forgotPasswordVerifyAction,
+  forgotPasswordUpdateAction
+} from '../../store/actions/authActions';
 
 // import utils
-import { isEmptyString, validateEmail } from '../../Utils/string';
+import { isEmptyString, checkRegno } from '../../Utils/string';
 
 // import components
 import LoginHeader from '../Layouts/Headers/LoginHeader';
 
 class ForgotPassword extends Component {
   state = {
-    // email
-    email: null,
-    isEmailError: false,
-    emailError: null,
+    // regno
+    regno: null,
+    isregnoError: false,
+    regnoError: null,
     // otp
     otp: null,
     isOtpError: false,
@@ -44,17 +53,17 @@ class ForgotPassword extends Component {
     this.props.history.push('/');
   };
 
-  handleOnEmailChange = e => {
+  handleOnregnoChange = e => {
     const currValue = e.target.value;
 
-    if (!validateEmail(currValue))
+    if (!checkRegno(currValue))
       return this.setState({
-        email: currValue,
-        isEmailError: true,
-        emailError: 'Invalid Email Address'
+        regno: currValue,
+        isregnoError: true,
+        regnoError: 'Invalid Registration Number'
       });
 
-    this.setState({ email: currValue, isEmailError: false, emailError: null });
+    this.setState({ regno: currValue, isregnoError: false, regnoError: null });
   };
 
   handleOnOtpChange = e => {
@@ -101,20 +110,36 @@ class ForgotPassword extends Component {
 
     // enable OTP confirmation
     if (false === isEmailSent) {
-      const { email, isEmailError } = this.state;
+      const { regno, isregnoError } = this.state;
 
       // if some errors already exists
-      if (isEmailError) return;
+      if (isregnoError) return;
 
       // check for empty field
-      if (isEmptyString(email)) {
+      if (isEmptyString(regno)) {
         return this.setState({
-          isEmailError: true,
-          emailError: 'Field must not be empty'
+          isregnoError: true,
+          regnoError: 'Field must not be empty'
         });
       }
 
-      return this.setState({ isEmailSent: true, buttonTitle: 'Confirm OTP' });
+      return this.props
+        .forgotPasswordAction(regno)
+        .then(() => {
+          this.setState({ isEmailSent: true, buttonTitle: 'Confirm OTP' });
+        })
+        .catch(() => {
+          this.setState({
+            isregnoError: true,
+            regnoError: this.props.message
+          });
+          setTimeout(() => {
+            this.setState({
+              isregnoError: false,
+              regnoError: null
+            });
+          }, 3000);
+        });
     }
 
     // enable password reset
@@ -132,10 +157,26 @@ class ForgotPassword extends Component {
         });
       }
 
-      return this.setState({
-        isOtpConfirmed: true,
-        buttonTitle: 'Reset Password'
-      });
+      return this.props
+        .forgotPasswordVerifyAction(this.props.forgotPasswordAccessToken, otp)
+        .then(() => {
+          this.setState({
+            isOtpConfirmed: true,
+            buttonTitle: 'Reset Password'
+          });
+        })
+        .catch(() => {
+          this.setState({
+            isOtpError: true,
+            otpError: this.props.message
+          });
+          setTimeout(() => {
+            this.setState({
+              isOtpError: false,
+              otpError: null
+            });
+          }, 3000);
+        });
     }
 
     const {
@@ -167,11 +208,21 @@ class ForgotPassword extends Component {
 
     if (isError) return;
 
-    // redirect to login page, after successfully resetting the password
-    this.setState({ isPasswordChanged: true });
-    setTimeout(() => {
-      this.props.history.push('/');
-    }, 2000);
+    this.props
+      .forgotPasswordUpdateAction(
+        this.props.forgotPasswordVerifyAccessToken,
+        password
+      )
+      .then(() => {
+        // redirect to login page, after successfully resetting the password
+        this.setState({ isPasswordChanged: true });
+        setTimeout(() => {
+          this.props.history.push('/');
+        }, 2000);
+      })
+      .catch(() => {
+        alert(this.props.message);
+      });
   };
 
   render() {
@@ -180,8 +231,8 @@ class ForgotPassword extends Component {
       isOtpConfirmed,
       buttonTitle,
       isPasswordChanged,
-      isEmailError,
-      emailError,
+      isregnoError,
+      regnoError,
       isOtpError,
       otpError,
       isPasswordError,
@@ -205,16 +256,16 @@ class ForgotPassword extends Component {
             <form>
               <Paper style={{ padding: 20 }}>
                 <TextField
-                  id='outlined-email-input'
+                  id='outlined-regno-input'
                   fullWidth
-                  label='Enter registered email address'
-                  type='email'
-                  name='email'
-                  value={this.state.email}
-                  error={isEmailError}
-                  helperText={emailError}
+                  label='Enter Registration Number'
+                  type='regno'
+                  name='regno'
+                  value={this.state.regno}
+                  error={isregnoError}
+                  helperText={regnoError}
                   disabled={isEmailSent}
-                  onChange={e => this.handleOnEmailChange(e)}
+                  onChange={e => this.handleOnregnoChange(e)}
                   margin='normal'
                   variant='outlined'
                 />
@@ -299,4 +350,26 @@ class ForgotPassword extends Component {
   }
 }
 
-export default ForgotPassword;
+ForgotPassword.propTypes = {
+  forgotPasswordAccessToken: PropTypes.string.isRequired,
+  forgotPasswordVerifyAccessToken: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  forgotPasswordAction: PropTypes.func.isRequired,
+  forgotPasswordVerifyAction: PropTypes.func.isRequired,
+  forgotPasswordUpdateAction: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  forgotPasswordAccessToken: state.auth.forgotPasswordAccessToken,
+  forgotPasswordVerifyAccessToken: state.auth.forgotPasswordVerifyAccessToken,
+  message: state.auth.message
+});
+
+export default connect(
+  mapStateToProps,
+  {
+    forgotPasswordAction,
+    forgotPasswordVerifyAction,
+    forgotPasswordUpdateAction
+  }
+)(ForgotPassword);

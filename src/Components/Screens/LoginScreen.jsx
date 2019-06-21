@@ -6,36 +6,41 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+// import redux actions
+import { loginAction } from '../../store/actions/authActions';
 
 // import utils
-import { isEmptyString, validateEmail } from '../../Utils/string';
+import { isEmptyString, checkRegno } from '../../Utils/string';
 
 // import components
 import LoginHeader from '../Layouts/Headers/LoginHeader';
 
 class LoginScreen extends Component {
   state = {
-    // email
-    email: null,
-    isEmailError: false,
-    emailError: null,
+    // regno
+    regno: null,
+    isregnoError: false,
+    regnoError: null,
     // password
     password: null,
     isPasswordError: false,
     passwordError: null
   };
 
-  handleOnEmailChange = e => {
-    const currEmail = e.target.value;
+  handleOnregnoChange = e => {
+    const currregno = e.target.value;
 
-    if (!validateEmail(currEmail))
+    if (!checkRegno(currregno))
       return this.setState({
-        email: currEmail,
-        isEmailError: true,
-        emailError: 'Invalid Email Address'
+        regno: currregno,
+        isregnoError: true,
+        regnoError: 'Invalid Registration Number'
       });
 
-    this.setState({ email: currEmail, isEmailError: false, emailError: null });
+    this.setState({ regno: currregno, isregnoError: false, regnoError: null });
   };
 
   handleOnPasswordChange = e => {
@@ -49,15 +54,15 @@ class LoginScreen extends Component {
   };
 
   handleOnSubmit = () => {
-    let { email, isEmailError, password, isPasswordError } = this.state;
+    let { regno, isregnoError, password, isPasswordError } = this.state;
 
     // check for empty fields
     let isError = false;
-    if (isEmptyString(email)) {
+    if (isEmptyString(regno)) {
       isError = true;
       this.setState({
-        isEmailError: true,
-        emailError: 'Field must not be empty'
+        isregnoError: true,
+        regnoError: 'Field must not be empty'
       });
     }
     if (isEmptyString(password)) {
@@ -71,16 +76,42 @@ class LoginScreen extends Component {
     if (isError) return;
 
     // check for any existing errors
-    if (isEmailError || isPasswordError) return;
+    if (isregnoError || isPasswordError) return;
 
-    this.props.history.push('/home');
+    // send user credentials to the server
+    this.props
+      .loginAction(regno, password)
+      .then(() => {
+        // user logged in
+        this.props.history.push('/home');
+      })
+      .catch(() => {
+        const { message } = this.props;
+        // authentication failed
+        if ('User not registered' === message) {
+          this.setState({ isregnoError: true, regnoError: message });
+          setTimeout(() => {
+            this.setState({ isregnoError: false, regnoError: null });
+          }, 3000);
+        } else if ('Incorrect Password' === message) {
+          this.setState({
+            isPasswordError: true,
+            passwordError: message
+          });
+          setTimeout(() => {
+            this.setState({ isPasswordError: false, passwordError: null });
+          }, 3000);
+        } else {
+          alert(message);
+        }
+      });
   };
 
   render() {
     const {
-      isEmailError,
+      isregnoError,
       isPasswordError,
-      emailError,
+      regnoError,
       passwordError
     } = this.state;
 
@@ -138,15 +169,15 @@ class LoginScreen extends Component {
                 <form>
                   <Paper style={{ padding: 20 }}>
                     <TextField
-                      id='outlined-email-input'
+                      id='outlined-regno-input'
                       fullWidth
-                      label='Email'
-                      type='email'
-                      name='email'
-                      value={this.state.email}
-                      error={isEmailError}
-                      helperText={emailError}
-                      onChange={e => this.handleOnEmailChange(e)}
+                      label='Registration Number'
+                      type='text'
+                      name='regno'
+                      value={this.state.regno}
+                      error={isregnoError}
+                      helperText={regnoError}
+                      onChange={e => this.handleOnregnoChange(e)}
                       margin='normal'
                       variant='outlined'
                     />
@@ -242,4 +273,18 @@ class LoginScreen extends Component {
   }
 }
 
-export default LoginScreen;
+LoginScreen.propTypes = {
+  loginAction: PropTypes.func.isRequired,
+  loginStatus: PropTypes.bool.isRequired,
+  message: PropTypes.string.isRequired
+};
+
+const mapStateToProps = state => ({
+  loginStatus: state.auth.loginStatus,
+  message: state.auth.message
+});
+
+export default connect(
+  mapStateToProps,
+  { loginAction }
+)(LoginScreen);

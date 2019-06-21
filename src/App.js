@@ -2,6 +2,10 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import { Provider } from 'react-redux';
+
+// import redux store
+import reduxStore from './store';
 
 // import screens
 import LoginScreen from './Components/Screens/LoginScreen';
@@ -22,20 +26,22 @@ const appTheme = createMuiTheme({
 
 function App() {
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={appTheme}>
-        <Switch>
-          <Route exact path='/' component={LoginScreen} />
-          <Route exact path='/sign-up' component={SignUpScreen} />
-          <Route
-            exact
-            path='/forgot-password'
-            component={ForgotPasswordScreen}
-          />
-          <Route component={NotFoundScreen} />
-        </Switch>
-      </ThemeProvider>
-    </BrowserRouter>
+    <Provider store={reduxStore}>
+      <BrowserRouter>
+        <ThemeProvider theme={appTheme}>
+          <Switch>
+            <Route exact path='/' component={LoginScreen} />
+            <Route exact path='/sign-up' component={SignUpScreen} />
+            <Route
+              exact
+              path='/forgot-password'
+              component={ForgotPasswordScreen}
+            />
+            <Route component={NotFoundScreen} />
+          </Switch>
+        </ThemeProvider>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
