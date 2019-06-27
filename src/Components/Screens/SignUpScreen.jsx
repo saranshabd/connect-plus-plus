@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // import redux actions
 import {
@@ -51,7 +52,9 @@ class SignUpScreen extends Component {
     otpError: null,
     isOtpVerified: false,
     // submit button
-    buttonTitle: 'Verify Email'
+    buttonTitle: 'Verify Email',
+    // spinner flag
+    spinner: false
   };
 
   handleOnChangeFirstname = e => {
@@ -142,6 +145,8 @@ class SignUpScreen extends Component {
   };
 
   handleOnSubmit = () => {
+    this.setState({ spinner: true });
+
     const {
       isOtpSent,
       isFirstnameError,
@@ -195,7 +200,7 @@ class SignUpScreen extends Component {
         });
       }
 
-      if (isError) return;
+      if (isError) return this.setState({ spinner: false });
 
       // check if there exists any errors
       if (
@@ -205,13 +210,17 @@ class SignUpScreen extends Component {
         isPasswordError ||
         isConfirmPasswordError
       )
-        return;
+        return this.setState({ spinner: false });
 
       // send the OTP to the user email id
       this.props
         .signUpAction(firstname, lastname, regno, password)
         .then(() => {
-          this.setState({ isOtpSent: true, buttonTitle: 'Confirm OTP' });
+          this.setState({
+            isOtpSent: true,
+            buttonTitle: 'Confirm OTP',
+            spinner: false
+          });
         })
         .catch(() => {
           let { message } = this.props;
@@ -222,7 +231,8 @@ class SignUpScreen extends Component {
               isRegnoError: true,
               firstnameError: message,
               lastnameError: message,
-              regnoError: message
+              regnoError: message,
+              spinner: false
             });
             setTimeout(() => {
               this.setState({
@@ -245,7 +255,8 @@ class SignUpScreen extends Component {
       if (isEmptyString(otp)) {
         return this.setState({
           isOtpError: true,
-          otpError: 'Field must not be empty'
+          otpError: 'Field must not be empty',
+          spinner: false
         });
       }
 
@@ -257,7 +268,8 @@ class SignUpScreen extends Component {
           this.setState({
             isOtpVerified: true,
             isOtpError: false,
-            otpError: null
+            otpError: null,
+            spinner: false
           });
           setTimeout(() => {
             this.setState({
@@ -270,7 +282,8 @@ class SignUpScreen extends Component {
           // authentication failed
           this.setState({
             isOtpError: true,
-            otpError: this.props.message
+            otpError: this.props.message,
+            spinner: false
           });
           setTimeout(() => {
             this.setState({
@@ -404,6 +417,9 @@ class SignUpScreen extends Component {
                     margin='normal'
                     variant='outlined'
                   />
+                ) : null}
+                {this.state.spinner ? (
+                  <CircularProgress color='secondary' />
                 ) : null}
                 <br />
                 <br />

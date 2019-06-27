@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -45,7 +46,9 @@ class ForgotPassword extends Component {
     isEmailSent: false,
     isOtpConfirmed: false,
     buttonTitle: 'Send OTP',
-    isPasswordChanged: false
+    isPasswordChanged: false,
+    // spinner flag
+    spinner: false
   };
 
   handleOnClose = () => {
@@ -106,6 +109,8 @@ class ForgotPassword extends Component {
   };
 
   onSubmitButton = () => {
+    this.setState({ spinner: true });
+
     const { isEmailSent, isOtpConfirmed } = this.state;
 
     // enable OTP confirmation
@@ -113,25 +118,31 @@ class ForgotPassword extends Component {
       const { regno, isregnoError } = this.state;
 
       // if some errors already exists
-      if (isregnoError) return;
+      if (isregnoError) return this.setState({ spinner: false });
 
       // check for empty field
       if (isEmptyString(regno)) {
         return this.setState({
           isregnoError: true,
-          regnoError: 'Field must not be empty'
+          regnoError: 'Field must not be empty',
+          spinner: false
         });
       }
 
       return this.props
         .forgotPasswordAction(regno)
         .then(() => {
-          this.setState({ isEmailSent: true, buttonTitle: 'Confirm OTP' });
+          this.setState({
+            isEmailSent: true,
+            buttonTitle: 'Confirm OTP',
+            spinner: false
+          });
         })
         .catch(() => {
           this.setState({
             isregnoError: true,
-            regnoError: this.props.message
+            regnoError: this.props.message,
+            spinner: false
           });
           setTimeout(() => {
             this.setState({
@@ -147,13 +158,14 @@ class ForgotPassword extends Component {
       const { otp, isOtpError } = this.state;
 
       // check if some errors already exists
-      if (isOtpError) return;
+      if (isOtpError) return this.setState({ spinner: false });
 
       // check for empty field
       if (isEmptyString(otp)) {
         return this.setState({
           isOtpError: true,
-          otpError: 'Field must not be empty'
+          otpError: 'Field must not be empty',
+          spinner: false
         });
       }
 
@@ -162,13 +174,15 @@ class ForgotPassword extends Component {
         .then(() => {
           this.setState({
             isOtpConfirmed: true,
-            buttonTitle: 'Reset Password'
+            buttonTitle: 'Reset Password',
+            spinner: false
           });
         })
         .catch(() => {
           this.setState({
             isOtpError: true,
-            otpError: this.props.message
+            otpError: this.props.message,
+            spinner: false
           });
           setTimeout(() => {
             this.setState({
@@ -187,7 +201,8 @@ class ForgotPassword extends Component {
     } = this.state;
 
     // check for already existing errors
-    if (isPasswordError || isConfirmPasswordError) return;
+    if (isPasswordError || isConfirmPasswordError)
+      return this.setState({ spinner: false });
 
     // check for empty fields
     let isError = false;
@@ -195,18 +210,20 @@ class ForgotPassword extends Component {
       isError = true;
       this.setState({
         isPasswordError: true,
-        passwordError: 'Field must not be empty'
+        passwordError: 'Field must not be empty',
+        spinner: false
       });
     }
     if (isEmptyString(confirmPassword)) {
       isError = true;
       this.setState({
         isConfirmPasswordError: true,
-        confirmPasswordError: 'Field must not be empty'
+        confirmPasswordError: 'Field must not be empty',
+        spinner: false
       });
     }
 
-    if (isError) return;
+    if (isError) return this.setState({ spinner: false });
 
     this.props
       .forgotPasswordUpdateAction(
@@ -215,12 +232,14 @@ class ForgotPassword extends Component {
       )
       .then(() => {
         // redirect to login page, after successfully resetting the password
-        this.setState({ isPasswordChanged: true });
+        this.setState({ isPasswordChanged: true, spinner: false });
         setTimeout(() => {
+          this.setState({ spinner: false });
           this.props.history.push('/');
         }, 2000);
       })
       .catch(() => {
+        this.setState({ spinner: false });
         alert(this.props.message);
       });
   };
@@ -315,7 +334,9 @@ class ForgotPassword extends Component {
                     />
                   </Box>
                 ) : null}
-
+                {this.state.spinner ? (
+                  <CircularProgress color='secondary' />
+                ) : null}
                 <br />
                 <br />
                 <Button
