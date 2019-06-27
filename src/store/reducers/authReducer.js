@@ -4,7 +4,8 @@ import {
   LOGIN_WITH_SIGN_UP,
   FORGOT_PASSWORD,
   FORGOT_PASSWORD_VERIFY,
-  FORGOT_PASSWORD_UPDATE
+  FORGOT_PASSWORD_UPDATE,
+  VERIFY_USERACCESSTOKEN
 } from '../reducerTypes/auth';
 
 let initialState = {
@@ -40,6 +41,9 @@ let authReducer = (state = initialState, action) => {
     }
     case FORGOT_PASSWORD_UPDATE: {
       return { ...state, ...action.payload };
+    }
+    case VERIFY_USERACCESSTOKEN: {
+      return { ...state };
     }
     default: {
       return { ...state };

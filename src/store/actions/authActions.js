@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { encryptStr, decryptStr } from '../../Utils/string';
+
 // import redux types
 import {
   LOGIN,
@@ -7,8 +9,25 @@ import {
   LOGIN_WITH_SIGN_UP,
   FORGOT_PASSWORD,
   FORGOT_PASSWORD_VERIFY,
-  FORGOT_PASSWORD_UPDATE
+  FORGOT_PASSWORD_UPDATE,
+  VERIFY_USERACCESSTOKEN
 } from '../reducerTypes/auth';
+
+export const verifyUseraccessToken = useraccesstoken => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/auth`, {
+        token: decryptStr(useraccesstoken)
+      })
+      .then(() => {
+        dispatch({ type: VERIFY_USERACCESSTOKEN });
+        resolve();
+      })
+      .catch(() => {
+        reject();
+      });
+  });
+};
 
 export const loginAction = (regno, password) => dispatch => {
   return new Promise((resolve, reject) => {
@@ -21,10 +40,13 @@ export const loginAction = (regno, password) => dispatch => {
         // user logged in
         const { useraccesstoken, message } = response.data;
 
+        // store user access token in local storage
+        localStorage.setItem('useraccesstoken', encryptStr(useraccesstoken));
+
         dispatch({
           type: LOGIN,
           payload: {
-            useraccesstoken,
+            useraccesstoken: encryptStr(useraccesstoken),
             loginStatus: true,
             message: message
           }
@@ -64,7 +86,7 @@ export const signUpAction = (
         dispatch({
           type: SIGN_UP,
           payload: {
-            signUpAccessToken: response.data.token,
+            signUpAccessToken: encryptStr(response.data.token),
             signUpStatus: true,
             message: response.data.message
           }
@@ -88,17 +110,20 @@ export const signUpVerifyAction = (signUpAccessToken, otp) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
       .post(`${process.env.REACT_APP_DEV_SERVER_URL}/auth/sign-up/verify`, {
-        token: signUpAccessToken,
+        token: decryptStr(signUpAccessToken),
         otp
       })
       .then(response => {
         // user logged in
         const { useraccesstoken, message } = response.data;
 
+        // store user access token in local storage
+        localStorage.setItem('useraccesstoken', encryptStr(useraccesstoken));
+
         dispatch({
           type: LOGIN_WITH_SIGN_UP,
           payload: {
-            useraccesstoken,
+            useraccesstoken: encryptStr(useraccesstoken),
             loginStatus: true,
             message: message,
             signUpAccessToken: null,
@@ -132,7 +157,7 @@ export const forgotPasswordAction = regno => dispatch => {
         dispatch({
           type: FORGOT_PASSWORD,
           payload: {
-            forgotPasswordAccessToken: response.data.token,
+            forgotPasswordAccessToken: encryptStr(response.data.token),
             forgotPasswordStatus: true,
             message: response.data.message
           }
@@ -161,7 +186,7 @@ export const forgotPasswordVerifyAction = (
       .post(
         `${process.env.REACT_APP_DEV_SERVER_URL}/auth/forgot-password/verify`,
         {
-          token: forgotPasswordAccessToken,
+          token: decryptStr(forgotPasswordAccessToken),
           otp
         }
       )
@@ -171,7 +196,7 @@ export const forgotPasswordVerifyAction = (
           type: FORGOT_PASSWORD_VERIFY,
           payload: {
             forgotPasswordAccessToken: null,
-            forgotPasswordVerifyAccessToken: response.data.token,
+            forgotPasswordVerifyAccessToken: encryptStr(response.data.token),
             forgotPasswordStatus: true,
             message: response.data.message
           }
@@ -201,7 +226,7 @@ export const forgotPasswordUpdateAction = (
       .post(
         `${process.env.REACT_APP_DEV_SERVER_URL}/auth/forgot-password/update`,
         {
-          token: forgotPasswordVerifyAccessToken,
+          token: decryptStr(forgotPasswordVerifyAccessToken),
           password
         }
       )

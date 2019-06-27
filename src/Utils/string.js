@@ -1,3 +1,5 @@
+import cryptoJs from 'crypto-js';
+
 export const containsEmptyStrings = args => {
   for (let i = 0; i < args.length; ++i)
     if (undefined === args[i] || '' === args[i]) return true;
@@ -32,4 +34,14 @@ export const validateName = name => {
   if (re.test(name)) return false; // string contains digits
   if (name.trim().indexOf(' ') > 0) return false; // string contains white spaces
   return true;
+};
+
+export const encryptStr = str => {
+  return cryptoJs.AES.encrypt(str, process.env.REACT_APP_DEV_SECRET);
+};
+
+export const decryptStr = str => {
+  return cryptoJs.AES.decrypt(str, process.env.REACT_APP_DEV_SECRET).toString(
+    cryptoJs.enc.Utf8
+  );
 };
