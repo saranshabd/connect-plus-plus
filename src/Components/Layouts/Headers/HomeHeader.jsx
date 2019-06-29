@@ -2,6 +2,7 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
+import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Slide from '@material-ui/core/Slide';
@@ -49,6 +50,10 @@ function HomeHeader(props) {
     setAnchorEl(null);
   };
 
+  const handleOnLogo = () => {
+    props.history.push('/home');
+  };
+
   const handleOnSignout = () => {
     setAnchorEl(null);
 
@@ -61,38 +66,47 @@ function HomeHeader(props) {
       <CssBaseline />
       <HideOnScroll {...props}>
         <AppBar>
-          <Toolbar>
-            <Typography variant='h4' className={classes.title}>
+          <Toolbar style={{ flexDirection: 'row' }}>
+            {/* <Typography variant='h4' className={classes.title}>
               Connect++
-            </Typography>
-            <div>
+            </Typography> */}
+            <Box className={classes.title}>
               <IconButton
-                aria-label='Account of current user'
-                aria-controls='menu-appbar'
-                aria-haspopup='true'
-                onClick={handleMenu}
+                // aria-label='Account of current user'
+                // aria-controls='menu-appbar'
+                // aria-haspopup='true'
+                onClick={handleOnLogo}
                 color='inherit'
               >
-                <MoreVert />
+                <Typography variant='h4'>Connect++</Typography>
               </IconButton>
-              <Menu
-                id='menu-appbar'
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right'
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right'
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleOnSignout}>Sign out</MenuItem>
-              </Menu>
-            </div>
+            </Box>
+            <IconButton
+              aria-label='Account of current user'
+              aria-controls='menu-appbar'
+              aria-haspopup='true'
+              onClick={handleMenu}
+              color='inherit'
+            >
+              <MoreVert />
+            </IconButton>
+            <Menu
+              id='menu-appbar'
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
+              }}
+              open={open}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleOnSignout}>Sign out</MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
       </HideOnScroll>

@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-// import layouts
+// import redux actions
+import { getPublicProfile } from '../../store/actions/profileActions';
+
+// import components
 import HomeHeader from '../Layouts/Headers/HomeHeader';
+import UserProfile from '../Layouts/HomePage/UserProfile';
+import UserDetails from '../Layouts/HomePage/UserDetails';
 
 class HomeScreen extends Component {
+  componentWillMount() {
+    // request for user public profile
+    this.props.getPublicProfile(this.props.useraccesstoken);
+  }
+
   render() {
     return (
       <Box
@@ -15,23 +27,40 @@ class HomeScreen extends Component {
       >
         <HomeHeader history={this.props.history} />
         <Container>
-          <Box my={2}>
-            {[...new Array(12)]
-              .map(
-                () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-              )
-              .join('\n')}
-          </Box>
+          <Grid container spacing={3}>
+            <Grid
+              item
+              xs={12}
+              sm={3}
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                width: '100%'
+              }}
+            >
+              <UserProfile />
+            </Grid>
+            <Grid item xs={12} sm={9}>
+              <UserDetails />
+            </Grid>
+          </Grid>
         </Container>
       </Box>
     );
   }
 }
 
+HomeScreen.propTypes = {
+  useraccesstoken: PropTypes.object.isRequired,
+  getPublicProfile: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  useraccesstoken: state.auth.useraccesstoken
+});
+
 export default connect(
-  null,
-  null
+  mapStateToProps,
+  { getPublicProfile }
 )(HomeScreen);

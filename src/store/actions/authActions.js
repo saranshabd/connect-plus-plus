@@ -21,7 +21,13 @@ export const verifyUseraccessToken = useraccesstoken => dispatch => {
         token: useraccesstoken
       })
       .then(() => {
-        dispatch({ type: VERIFY_USERACCESSTOKEN });
+        dispatch({
+          type: VERIFY_USERACCESSTOKEN,
+          payload: {
+            loginStatus: true,
+            useraccesstoken: encryptStr(useraccesstoken)
+          }
+        });
         resolve();
       })
       .catch(() => {

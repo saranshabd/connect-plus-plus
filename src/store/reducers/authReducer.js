@@ -43,7 +43,7 @@ let authReducer = (state = initialState, action) => {
       return { ...state, ...action.payload };
     }
     case VERIFY_USERACCESSTOKEN: {
-      return { ...state };
+      return { ...state, ...action.payload };
     }
     default: {
       return { ...state };
