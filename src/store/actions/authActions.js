@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { registerUseraccesstoken } from '../../LocalStorageActions/auth';
 import { encryptStr, decryptStr } from '../../Utils/string';
 
 // import redux types
@@ -17,7 +18,7 @@ export const verifyUseraccessToken = useraccesstoken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
       .post(`${process.env.REACT_APP_DEV_SERVER_URL}/auth`, {
-        token: decryptStr(useraccesstoken)
+        token: useraccesstoken
       })
       .then(() => {
         dispatch({ type: VERIFY_USERACCESSTOKEN });
@@ -40,8 +41,7 @@ export const loginAction = (regno, password) => dispatch => {
         // user logged in
         const { useraccesstoken, message } = response.data;
 
-        // store user access token in local storage
-        localStorage.setItem('useraccesstoken', encryptStr(useraccesstoken));
+        registerUseraccesstoken(useraccesstoken);
 
         dispatch({
           type: LOGIN,
@@ -117,8 +117,7 @@ export const signUpVerifyAction = (signUpAccessToken, otp) => dispatch => {
         // user logged in
         const { useraccesstoken, message } = response.data;
 
-        // store user access token in local storage
-        localStorage.setItem('useraccesstoken', encryptStr(useraccesstoken));
+        registerUseraccesstoken(useraccesstoken);
 
         dispatch({
           type: LOGIN_WITH_SIGN_UP,

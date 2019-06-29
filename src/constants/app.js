@@ -1,1 +1,1 @@
-export const APP_COLOR = '#aa00ff';
+export const APP_COLOR = '#004d40';

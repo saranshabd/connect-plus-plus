@@ -6,6 +6,11 @@ import PropTypes from 'prop-types';
 // import redux actions
 import { verifyUseraccessToken } from '../../store/actions/authActions';
 
+import {
+  getUserAccessToken,
+  removeUserAccessToken
+} from '../../LocalStorageActions/auth';
+
 import { isEmptyString } from '../../Utils/string';
 
 class UnAuthorizedRoute extends Component {
@@ -16,7 +21,7 @@ class UnAuthorizedRoute extends Component {
 
   componentWillMount() {
     this.setState({ wait: true });
-    const useraccesstoken = localStorage.getItem('useraccesstoken');
+    const useraccesstoken = getUserAccessToken();
     if (!isEmptyString(useraccesstoken))
       this.props
         .verifyUseraccessToken(useraccesstoken)
@@ -42,7 +47,7 @@ class UnAuthorizedRoute extends Component {
         render={props => {
           while (!this.state.wait) {
             if (!this.state.isValidated) {
-              localStorage.removeItem('useraccesstoken');
+              removeUserAccessToken();
               return <RenderComponent {...props} {...rest} />;
             } else {
               return <Redirect to={{ pathname: '/home' }} />;

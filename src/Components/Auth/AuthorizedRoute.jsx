@@ -8,6 +8,11 @@ import { verifyUseraccessToken } from '../../store/actions/authActions';
 
 import { isEmptyString } from '../../Utils/string';
 
+import {
+  getUserAccessToken,
+  removeUserAccessToken
+} from '../../LocalStorageActions/auth';
+
 class AuthorizedRoute extends Component {
   state = {
     isValidated: false,
@@ -16,8 +21,8 @@ class AuthorizedRoute extends Component {
 
   componentWillMount() {
     this.setState({ wait: true });
-    const useraccesstoken = localStorage.getItem('useraccesstoken');
-    if (!isEmptyString(useraccesstoken))
+    const useraccesstoken = getUserAccessToken();
+    if (!isEmptyString(useraccesstoken)) {
       this.props
         .verifyUseraccessToken(useraccesstoken)
         .then(() => {
@@ -27,7 +32,9 @@ class AuthorizedRoute extends Component {
           this.setState({ isValidated: false, wait: false });
           console.log(useraccesstoken);
         });
-    else this.setState({ isValidated: false, wait: false });
+    } else {
+      this.setState({ isValidated: false, wait: false });
+    }
   }
 
   render() {
@@ -44,7 +51,7 @@ class AuthorizedRoute extends Component {
             if (this.state.isValidated) {
               return <RenderComponent {...props} {...rest} />;
             } else {
-              localStorage.removeItem('useraccesstoken');
+              removeUserAccessToken();
               return <Redirect to={{ pathname: '/' }} />;
             }
           }

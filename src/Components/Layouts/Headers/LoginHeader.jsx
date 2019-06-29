@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function LoginHeader(props) {
+function LoginHeader(props) {
   const classes = useStyles();
 
   return (
@@ -38,3 +38,5 @@ export default function LoginHeader(props) {
     </div>
   );
 }
+
+export default LoginHeader;
