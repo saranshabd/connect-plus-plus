@@ -6,7 +6,9 @@ import {
   GET_PROJECTS,
   GET_TECH_USED,
   UPDATE_COMPETITIVE_PROGRAMMING,
-  UPDATE_PUBLIC_PROFILE
+  UPDATE_PUBLIC_PROFILE,
+  ADD_PROJECT,
+  DELETE_PROJECT
 } from '../reducerTypes/profile';
 
 import { decryptStr } from '../../Utils/string';
@@ -87,6 +89,42 @@ export const getProjects = useraccesstoken => dispatch => {
           payload: { projects }
         });
 
+        resolve();
+      })
+      .catch(error => {
+        reject();
+      });
+  });
+};
+
+export const addProjects = (useraccesstoken, project) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/projects/add`, {
+        token: decryptStr(useraccesstoken),
+        ...project
+      })
+      .then(response => {
+        dispatch({ type: ADD_PROJECT });
+        resolve();
+      })
+      .catch(error => {
+        reject(error.data.message);
+      });
+  });
+};
+
+export const deleteProject = (useraccesstoken, project_id) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/projects`, {
+        data: {
+          token: decryptStr(useraccesstoken),
+          project_id
+        }
+      })
+      .then(() => {
+        dispatch({ type: DELETE_PROJECT });
         resolve();
       })
       .catch(error => {

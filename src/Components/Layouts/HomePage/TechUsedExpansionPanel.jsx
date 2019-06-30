@@ -7,14 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-// import redux actions
-import { getTechUsed } from '../../../store/actions/profileActions';
-
 class TechUsedExpansionPanel extends Component {
-  componentDidMount() {
-    this.props.getTechUsed(this.props.useraccesstoken);
-  }
-
   render() {
     return (
       <ExpansionPanel elevation={2}>
@@ -37,8 +30,7 @@ class TechUsedExpansionPanel extends Component {
 }
 
 TechUsedExpansionPanel.propTypes = {
-  useraccesstoken: PropTypes.object.isRequired,
-  getTechUsed: PropTypes.func.isRequired
+  useraccesstoken: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -47,5 +39,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getTechUsed }
+  null
 )(TechUsedExpansionPanel);

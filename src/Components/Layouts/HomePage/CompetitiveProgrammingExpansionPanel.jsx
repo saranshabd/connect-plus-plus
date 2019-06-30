@@ -17,10 +17,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // import redux actions
-import {
-  getCompetitiveProgrammingProfile,
-  updateCompetitiveProgrammingWebsite
-} from '../../../store/actions/profileActions';
+import { updateCompetitiveProgrammingWebsite } from '../../../store/actions/profileActions';
 
 import { isEmptyString } from '../../../Utils/string';
 import { APP_COLOR } from '../../../constants/app';
@@ -46,10 +43,6 @@ class CompetitiveProgrammingExpansionPanel extends Component {
     isError: false,
     error: undefined
   };
-
-  componentDidMount() {
-    this.props.getCompetitiveProgrammingProfile(this.props.useraccesstoken);
-  }
 
   handleOnSubmit = fieldValue => {
     const field = this.state[fieldValue];
@@ -382,7 +375,7 @@ class CompetitiveProgrammingExpansionPanel extends Component {
 
 CompetitiveProgrammingExpansionPanel.proTypes = {
   useraccesstoken: PropTypes.object.isRequired,
-  getCompetitiveProgrammingProfile: PropTypes.func.isRequired
+  updateCompetitiveProgrammingWebsite: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -392,5 +385,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getCompetitiveProgrammingProfile, updateCompetitiveProgrammingWebsite }
+  { updateCompetitiveProgrammingWebsite }
 )(CompetitiveProgrammingExpansionPanel);
