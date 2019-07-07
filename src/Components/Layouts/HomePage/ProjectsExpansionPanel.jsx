@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import Snackbar from '@material-ui/core/Snackbar';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
@@ -29,7 +30,6 @@ import {
 import { APP_COLOR } from '../../../constants/app';
 import { monthNames, years } from '../../../Utils/dataStructures';
 import { containsEmptyStrings } from '../../../Utils/string';
-import { Grid } from '@material-ui/core';
 
 class ProjectsExpansionPanel extends Component {
   state = {

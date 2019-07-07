@@ -27,3 +27,7 @@ export const monthNames = () => {
     'December'
   ];
 };
+
+export const levelOfKnowledge = () => {
+  return [1, 2, 3, 4, 5];
+};

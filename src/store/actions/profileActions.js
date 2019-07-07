@@ -8,7 +8,9 @@ import {
   UPDATE_COMPETITIVE_PROGRAMMING,
   UPDATE_PUBLIC_PROFILE,
   ADD_PROJECT,
-  DELETE_PROJECT
+  DELETE_PROJECT,
+  DELETE_TECH,
+  ADD_TECH
 } from '../reducerTypes/profile';
 
 import { decryptStr } from '../../Utils/string';
@@ -212,5 +214,39 @@ export const getTechUsed = useraccesstoken => dispatch => {
       .catch(() => {
         reject();
       });
+  });
+};
+
+export const deleteTechUsed = (useraccesstoken, tech_id) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/tech`, {
+        data: {
+          token: decryptStr(useraccesstoken),
+          tech_id
+        }
+      })
+      .then(() => {
+        dispatch({ type: DELETE_TECH });
+        resolve();
+      })
+      .catch(error => {
+        reject();
+      });
+  });
+};
+
+export const addTechUsed = (useraccesstoken, tech) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/tech/add`, {
+        token: decryptStr(useraccesstoken),
+        ...tech
+      })
+      .then(() => {
+        dispatch({ type: ADD_TECH });
+        resolve();
+      })
+      .catch(() => reject());
   });
 };
