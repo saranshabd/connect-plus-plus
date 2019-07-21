@@ -12,6 +12,9 @@ import { CssBaseline } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
+// import components
+import SearchBar from '../HomePage/SearchBar';
+
 import { removeUserAccessToken } from '../../../LocalStorageActions/auth';
 
 function HideOnScroll(props) {
@@ -56,7 +59,6 @@ function HomeHeader(props) {
 
   const handleOnSignout = () => {
     setAnchorEl(null);
-
     removeUserAccessToken();
     props.history.push('/');
   };
@@ -67,20 +69,21 @@ function HomeHeader(props) {
       <HideOnScroll {...props}>
         <AppBar>
           <Toolbar style={{ flexDirection: 'row' }}>
-            {/* <Typography variant='h4' className={classes.title}>
-              Connect++
-            </Typography> */}
             <Box className={classes.title}>
-              <IconButton
-                // aria-label='Account of current user'
-                // aria-controls='menu-appbar'
-                // aria-haspopup='true'
-                onClick={handleOnLogo}
-                color='inherit'
-              >
+              <IconButton onClick={handleOnLogo} color='inherit'>
                 <Typography variant='h4'>Connect++</Typography>
               </IconButton>
             </Box>
+            <SearchBar />
+            {/* <IconButton
+              aria-label='Account of current user'
+              aria-controls='menu-appbar'
+              aria-haspopup='true'
+              onClick={handleOnSearch}
+              color='inherit'
+            >
+              <SearchButton />
+            </IconButton> */}
             <IconButton
               aria-label='Account of current user'
               aria-controls='menu-appbar'

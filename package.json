@@ -5,9 +5,11 @@
   "dependencies": {
     "@material-ui/core": "^4.0.0-rc.0",
     "@material-ui/icons": "^4.2.0",
+    "autosuggest-highlight": "^3.1.1",
     "axios": "^0.19.0",
     "crypto-js": "^3.1.9-1",
     "react": "^16.8.6",
+    "react-autosuggest": "^9.4.3",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
