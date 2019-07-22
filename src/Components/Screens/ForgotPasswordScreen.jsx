@@ -24,6 +24,7 @@ import { isEmptyString, checkRegno } from '../../Utils/string';
 
 // import components
 import LoginHeader from '../Layouts/Headers/LoginHeader';
+import { Grid } from '@material-ui/core';
 
 class ForgotPassword extends Component {
   state = {
@@ -272,84 +273,90 @@ class ForgotPassword extends Component {
           title='Remember your password now? Login'
         />
         <Container>
-          <Box component='div' style={{ padding: 50 }}>
-            <form>
-              <Paper style={{ padding: 20 }}>
-                <TextField
-                  id='outlined-regno-input'
-                  fullWidth
-                  label='Enter Registration Number'
-                  type='regno'
-                  name='regno'
-                  value={this.state.regno}
-                  error={isregnoError}
-                  helperText={regnoError}
-                  disabled={isEmailSent}
-                  onChange={e => this.handleOnregnoChange(e)}
-                  margin='normal'
-                  variant='outlined'
-                />
-                {isEmailSent ? (
-                  <TextField
-                    id='outlined-text-input'
-                    fullWidth
-                    label='Enter OTP sent to your email'
-                    type='text'
-                    name='otp'
-                    value={this.state.otp}
-                    error={isOtpError}
-                    helperText={otpError}
-                    onChange={e => this.handleOnOtpChange(e)}
-                    disabled={isOtpConfirmed}
-                    margin='normal'
-                    variant='outlined'
-                  />
-                ) : null}
-                {isOtpConfirmed ? (
-                  <Box>
+          <Box component='div' style={{ paddingTop: 20 }}>
+            <Grid container>
+              <Grid item xs={0} sm={3} />
+              <Grid item xs={12} sm={6}>
+                <form>
+                  <Paper style={{ padding: 20 }}>
                     <TextField
-                      id='outlined-password-input'
+                      id='outlined-regno-input'
                       fullWidth
-                      name='password'
-                      label='Enter New Password'
-                      type='password'
-                      value={this.state.password}
-                      error={isPasswordError}
-                      helperText={passwordError}
-                      onChange={e => this.handleOnPasswordChange(e)}
+                      label='Enter Registration Number'
+                      type='regno'
+                      name='regno'
+                      value={this.state.regno}
+                      error={isregnoError}
+                      helperText={regnoError}
+                      disabled={isEmailSent}
+                      onChange={e => this.handleOnregnoChange(e)}
                       margin='normal'
                       variant='outlined'
                     />
-                    <TextField
-                      id='outlined-password-input'
+                    {isEmailSent ? (
+                      <TextField
+                        id='outlined-text-input'
+                        fullWidth
+                        label='Enter OTP sent to your email'
+                        type='text'
+                        name='otp'
+                        value={this.state.otp}
+                        error={isOtpError}
+                        helperText={otpError}
+                        onChange={e => this.handleOnOtpChange(e)}
+                        disabled={isOtpConfirmed}
+                        margin='normal'
+                        variant='outlined'
+                      />
+                    ) : null}
+                    {isOtpConfirmed ? (
+                      <Box>
+                        <TextField
+                          id='outlined-password-input'
+                          fullWidth
+                          name='password'
+                          label='Enter New Password'
+                          type='password'
+                          value={this.state.password}
+                          error={isPasswordError}
+                          helperText={passwordError}
+                          onChange={e => this.handleOnPasswordChange(e)}
+                          margin='normal'
+                          variant='outlined'
+                        />
+                        <TextField
+                          id='outlined-password-input'
+                          fullWidth
+                          name='confirmPassword'
+                          label='Confirm New Password'
+                          type='password'
+                          value={this.state.confirmPassword}
+                          error={isConfirmPasswordError}
+                          helperText={confirmPasswordError}
+                          onChange={e => this.handleOnConfirmPasswordChange(e)}
+                          margin='normal'
+                          variant='outlined'
+                        />
+                      </Box>
+                    ) : null}
+                    {this.state.spinner ? (
+                      <CircularProgress color='secondary' />
+                    ) : null}
+                    <br />
+                    <br />
+                    <Button
+                      onClick={() => this.onSubmitButton()}
+                      variant='contained'
+                      color='primary'
                       fullWidth
-                      name='confirmPassword'
-                      label='Confirm New Password'
-                      type='password'
-                      value={this.state.confirmPassword}
-                      error={isConfirmPasswordError}
-                      helperText={confirmPasswordError}
-                      onChange={e => this.handleOnConfirmPasswordChange(e)}
-                      margin='normal'
-                      variant='outlined'
-                    />
-                  </Box>
-                ) : null}
-                {this.state.spinner ? (
-                  <CircularProgress color='secondary' />
-                ) : null}
-                <br />
-                <br />
-                <Button
-                  onClick={() => this.onSubmitButton()}
-                  variant='contained'
-                  color='primary'
-                  fullWidth
-                >
-                  {buttonTitle}
-                </Button>
-              </Paper>
-            </form>
+                    >
+                      {buttonTitle}
+                    </Button>
+                  </Paper>
+                </form>
+              </Grid>
+              <Grid item xs={0} sm={3} />
+            </Grid>
           </Box>
           <Snackbar
             open={isPasswordChanged}
