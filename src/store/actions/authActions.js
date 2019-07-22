@@ -66,7 +66,7 @@ export const loginAction = (regno, password) => dispatch => {
           payload: {
             userAccessToken: null,
             loginStatus: false,
-            message: error.response.data.message
+            message: error
           }
         });
         reject();
