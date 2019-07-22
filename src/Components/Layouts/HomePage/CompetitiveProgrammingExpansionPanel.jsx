@@ -13,6 +13,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -29,6 +30,8 @@ const style = {
 
 class CompetitiveProgrammingExpansionPanel extends Component {
   state = {
+    // editing mode
+    enableEditing: !this.props.searchUser,
     editPreferedProgrammingLanguage: false,
     preferedLanguage: undefined,
     editCodeChef: false,
@@ -97,13 +100,29 @@ class CompetitiveProgrammingExpansionPanel extends Component {
   };
 
   render() {
-    const {
-      preferedLanguage: preferProgrammingLanguage,
-      codeChefUrl: codeChef,
-      hackerearthUrl: hackerearth,
-      topCoderUrl: topCoder,
-      gitHubUrl: gitHub
-    } = this.props.competitiveProgramming;
+    let preferProgrammingLanguage = null;
+    let codeChef = null;
+    let hackerearth = null;
+    let topCoder = null;
+    let gitHub = null;
+
+    if (!this.props.searchUser) {
+      // load logged in user profile
+      const { competitiveProgramming } = this.props;
+      preferProgrammingLanguage = competitiveProgramming.preferedLanguage;
+      codeChef = competitiveProgramming.codeChefUrl;
+      hackerearth = competitiveProgramming.hackerearthUrl;
+      topCoder = competitiveProgramming.topCoderUrl;
+      gitHub = competitiveProgramming.gitHubUrl;
+    } else {
+      // load searched user profile
+      const { searchCompetitiveProgramming } = this.props;
+      preferProgrammingLanguage = searchCompetitiveProgramming.preferedLanguage;
+      codeChef = searchCompetitiveProgramming.codeChefUrl;
+      hackerearth = searchCompetitiveProgramming.hackerearthUrl;
+      topCoder = searchCompetitiveProgramming.topCoderUrl;
+      gitHub = searchCompetitiveProgramming.gitHubUrl;
+    }
 
     const {
       editPreferedProgrammingLanguage,
@@ -147,7 +166,9 @@ class CompetitiveProgrammingExpansionPanel extends Component {
                 </IconButton>
                 <IconButton
                   onClick={() =>
-                    this.setState({ editPreferedProgrammingLanguage: false })
+                    this.setState({
+                      editPreferedProgrammingLanguage: false
+                    })
                   }
                 >
                   <ClearIcon style={{ color: 'red' }} />
@@ -162,13 +183,20 @@ class CompetitiveProgrammingExpansionPanel extends Component {
                 ) : (
                   <span style={{ color: 'red' }}>Nil</span>
                 )}
-                <IconButton
-                  onClick={() =>
-                    this.setState({ editPreferedProgrammingLanguage: true })
-                  }
-                >
-                  <EditIcon />
-                </IconButton>
+                {this.state.enableEditing ? (
+                  <IconButton
+                    onClick={() =>
+                      this.setState({ editPreferedProgrammingLanguage: true })
+                    }
+                  >
+                    <EditIcon />
+                  </IconButton>
+                ) : (
+                  <span>
+                    <br />
+                    <br />
+                  </span>
+                )}
               </span>
             )}
           </Typography>
@@ -208,11 +236,18 @@ class CompetitiveProgrammingExpansionPanel extends Component {
                 ) : (
                   <span style={{ color: 'red' }}>Nil</span>
                 )}
-                <IconButton
-                  onClick={() => this.setState({ editCodeChef: true })}
-                >
-                  <EditIcon />
-                </IconButton>
+                {this.state.enableEditing ? (
+                  <IconButton
+                    onClick={() => this.setState({ editCodeChef: true })}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                ) : (
+                  <span>
+                    <br />
+                    <br />
+                  </span>
+                )}
               </span>
             )}
           </Typography>
@@ -256,11 +291,18 @@ class CompetitiveProgrammingExpansionPanel extends Component {
                 ) : (
                   <span style={{ color: 'red' }}>Nil</span>
                 )}
-                <IconButton
-                  onClick={() => this.setState({ editHackerearth: true })}
-                >
-                  <EditIcon />
-                </IconButton>
+                {this.state.enableEditing ? (
+                  <IconButton
+                    onClick={() => this.setState({ editHackerearth: true })}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                ) : (
+                  <span>
+                    <br />
+                    <br />
+                  </span>
+                )}
               </span>
             )}
           </Typography>
@@ -300,11 +342,18 @@ class CompetitiveProgrammingExpansionPanel extends Component {
                 ) : (
                   <span style={{ color: 'red' }}>Nil</span>
                 )}
-                <IconButton
-                  onClick={() => this.setState({ editTopCoder: true })}
-                >
-                  <EditIcon />
-                </IconButton>
+                {this.state.enableEditing ? (
+                  <IconButton
+                    onClick={() => this.setState({ editTopCoder: true })}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                ) : (
+                  <span>
+                    <br />
+                    <br />
+                  </span>
+                )}
               </span>
             )}
           </Typography>
@@ -344,9 +393,18 @@ class CompetitiveProgrammingExpansionPanel extends Component {
                 ) : (
                   <span style={{ color: 'red' }}>Nil</span>
                 )}
-                <IconButton onClick={() => this.setState({ editGitHub: true })}>
-                  <EditIcon />
-                </IconButton>
+                {this.state.enableEditing ? (
+                  <IconButton
+                    onClick={() => this.setState({ editGitHub: true })}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                ) : (
+                  <span>
+                    <br />
+                    <br />
+                  </span>
+                )}
               </span>
             )}
           </Typography>
@@ -375,15 +433,21 @@ class CompetitiveProgrammingExpansionPanel extends Component {
 
 CompetitiveProgrammingExpansionPanel.proTypes = {
   useraccesstoken: PropTypes.object.isRequired,
-  updateCompetitiveProgrammingWebsite: PropTypes.func.isRequired
+  searchUser: PropTypes.bool.isRequired,
+  updateCompetitiveProgrammingWebsite: PropTypes.func.isRequired,
+  searchCompetitiveProgramming: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   useraccesstoken: state.auth.useraccesstoken,
-  competitiveProgramming: state.competitiveProgramming
+  searchUser: state.applicationState.searchUser,
+  competitiveProgramming: state.competitiveProgramming,
+  searchCompetitiveProgramming: state.search.programming
 });
 
-export default connect(
-  mapStateToProps,
-  { updateCompetitiveProgrammingWebsite }
-)(CompetitiveProgrammingExpansionPanel);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { updateCompetitiveProgrammingWebsite }
+  )(CompetitiveProgrammingExpansionPanel)
+);

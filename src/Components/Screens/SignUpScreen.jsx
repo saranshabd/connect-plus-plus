@@ -8,6 +8,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -469,7 +470,9 @@ const mapStateToProps = state => ({
   signUpAccessToken: state.auth.signUpAccessToken
 });
 
-export default connect(
-  mapStateToProps,
-  { signUpAction, signUpVerifyAction }
-)(SignUpScreen);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { signUpAction, signUpVerifyAction }
+  )(SignUpScreen)
+);

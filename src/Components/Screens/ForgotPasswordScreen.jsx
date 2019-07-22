@@ -8,6 +8,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -386,11 +387,13 @@ const mapStateToProps = state => ({
   message: state.auth.message
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    forgotPasswordAction,
-    forgotPasswordVerifyAction,
-    forgotPasswordUpdateAction
-  }
-)(ForgotPassword);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      forgotPasswordAction,
+      forgotPasswordVerifyAction,
+      forgotPasswordUpdateAction
+    }
+  )(ForgotPassword)
+);

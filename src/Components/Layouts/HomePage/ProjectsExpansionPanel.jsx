@@ -18,6 +18,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -33,6 +34,7 @@ import { containsEmptyStrings } from '../../../Utils/string';
 
 class ProjectsExpansionPanel extends Component {
   state = {
+    enableEditing: !this.props.searchUser,
     addProject: false,
     // add project state
     projectNameField: undefined,
@@ -148,7 +150,13 @@ class ProjectsExpansionPanel extends Component {
   };
 
   render() {
-    const { projects } = this.props;
+    let projects = [];
+    if (!this.props.searchUser) {
+      projects = this.props.projects;
+    } else {
+      projects = [...this.props.searchProjects];
+    }
+
     return (
       <ExpansionPanel elevation={2}>
         <ExpansionPanelSummary
@@ -159,13 +167,15 @@ class ProjectsExpansionPanel extends Component {
           <Typography variant='h5'>Projects</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails style={{ flexDirection: 'column' }}>
-          <Button
-            style={{ backgroundColor: APP_COLOR, color: '#fff' }}
-            onClick={() => this.setState({ addProject: true })}
-          >
-            <AddIcon />
-            Add Projects
-          </Button>
+          {this.state.enableEditing ? (
+            <Button
+              style={{ backgroundColor: APP_COLOR, color: '#fff' }}
+              onClick={() => this.setState({ addProject: true })}
+            >
+              <AddIcon />
+              Add Projects
+            </Button>
+          ) : null}
           <br />
           {this.state.addProject ? (
             <span>
@@ -328,17 +338,19 @@ class ProjectsExpansionPanel extends Component {
                         </Typography>
                       </Grid>
                       <Grid item xs={1} sm={1}>
-                        <IconButton
-                          size='large'
-                          onClick={() =>
-                            this.handleOnDeleteProject(
-                              project.project_id,
-                              project.projectName
-                            )
-                          }
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                        {this.state.enableEditing ? (
+                          <IconButton
+                            size='large'
+                            onClick={() =>
+                              this.handleOnDeleteProject(
+                                project.project_id,
+                                project.projectName
+                              )
+                            }
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        ) : null}
                       </Grid>
                     </Grid>
                     <br />
@@ -387,15 +399,21 @@ ProjectsExpansionPanel.propTypes = {
   useraccesstoken: PropTypes.object.isRequired,
   project: PropTypes.array.isRequired,
   addProjects: PropTypes.func.isRequired,
-  deleteProject: PropTypes.func.isRequired
+  deleteProject: PropTypes.func.isRequired,
+  searchUser: PropTypes.bool.isRequired,
+  searchProjects: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
   useraccesstoken: state.auth.useraccesstoken,
-  projects: state.projects.projects
+  searchUser: state.applicationState.searchUser,
+  projects: state.projects.projects,
+  searchProjects: state.search.projects
 });
 
-export default connect(
-  mapStateToProps,
-  { addProjects, deleteProject }
-)(ProjectsExpansionPanel);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { addProjects, deleteProject }
+  )(ProjectsExpansionPanel)
+);

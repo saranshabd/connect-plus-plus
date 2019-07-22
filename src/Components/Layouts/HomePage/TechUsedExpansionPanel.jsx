@@ -19,6 +19,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GradeIcon from '@material-ui/icons/Grade';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -34,6 +35,8 @@ import { years, levelOfKnowledge } from '../../../Utils/dataStructures';
 
 class TechUsedExpansionPanel extends Component {
   state = {
+    // editing mode
+    enableEditing: !this.props.searchUser,
     // add tech state
     addTech: false,
     techNameField: undefined,
@@ -109,7 +112,12 @@ class TechUsedExpansionPanel extends Component {
   };
 
   render() {
-    const { techs } = this.props;
+    let techs = [];
+    if (!this.props.searchUser) {
+      techs = this.props.techs;
+    } else {
+      techs = this.props.searchTechs;
+    }
 
     return (
       <ExpansionPanel elevation={2}>
@@ -121,13 +129,15 @@ class TechUsedExpansionPanel extends Component {
           <Typography variant='h5'>Technologies Used</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails style={{ flexDirection: 'column' }}>
-          <Button
-            style={{ backgroundColor: APP_COLOR, color: '#fff' }}
-            onClick={() => this.setState({ addTech: true })}
-          >
-            <AddIcon />
-            Add Tech
-          </Button>
+          {this.state.enableEditing ? (
+            <Button
+              style={{ backgroundColor: APP_COLOR, color: '#fff' }}
+              onClick={() => this.setState({ addTech: true })}
+            >
+              <AddIcon />
+              Add Tech
+            </Button>
+          ) : null}
           {this.state.addTech ? (
             <span>
               <br />
@@ -247,14 +257,19 @@ class TechUsedExpansionPanel extends Component {
                         <Typography variant='h5'>{tech.techName}</Typography>
                       </Grid>
                       <Grid item xs={1} sm={1}>
-                        <IconButton
-                          size='large'
-                          onClick={() =>
-                            this.handleOnDeleteTech(tech.tech_id, tech.techName)
-                          }
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                        {this.state.enableEditing ? (
+                          <IconButton
+                            size='large'
+                            onClick={() =>
+                              this.handleOnDeleteTech(
+                                tech.tech_id,
+                                tech.techName
+                              )
+                            }
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        ) : null}
                       </Grid>
                     </Grid>
                     <Typography component='span'>
@@ -322,8 +337,6 @@ class TechUsedExpansionPanel extends Component {
                         {tech.sourceName}
                       </Button>
                     </span>
-                    {/* <Typography>Source Name: {tech.sourceName}</Typography>
-                    <Typography>Source URL: {tech.sourceUrl}</Typography> */}
                   </Grid>
                 </Paper>
                 <br />
@@ -356,16 +369,22 @@ class TechUsedExpansionPanel extends Component {
 
 TechUsedExpansionPanel.propTypes = {
   useraccesstoken: PropTypes.object.isRequired,
+  searchUser: PropTypes.bool.isRequired,
   techs: PropTypes.array.isRequired,
-  deleteTechUsed: PropTypes.func.isRequired
+  deleteTechUsed: PropTypes.func.isRequired,
+  searchTechs: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
   useraccesstoken: state.auth.useraccesstoken,
-  techs: state.techUsed.techs
+  searchUser: state.applicationState.searchUser,
+  techs: state.techUsed.techs,
+  searchTechs: state.search.techs
 });
 
-export default connect(
-  mapStateToProps,
-  { deleteTechUsed, addTechUsed }
-)(TechUsedExpansionPanel);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { deleteTechUsed, addTechUsed }
+  )(TechUsedExpansionPanel)
+);

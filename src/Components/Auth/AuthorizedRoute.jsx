@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -124,14 +125,16 @@ const mapStateToProps = state => ({
   useraccesstoken: state.auth.useraccesstoken
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    verifyUseraccessToken,
-    getPublicProfile,
-    getProjects,
-    getCompetitiveProgrammingProfile,
-    getTechUsed,
-    cacheAllUsers
-  }
-)(AuthorizedRoute);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      verifyUseraccessToken,
+      getPublicProfile,
+      getProjects,
+      getCompetitiveProgrammingProfile,
+      getTechUsed,
+      cacheAllUsers
+    }
+  )(AuthorizedRoute)
+);

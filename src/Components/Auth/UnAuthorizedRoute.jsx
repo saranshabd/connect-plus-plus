@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -64,7 +65,9 @@ UnAuthorizedRoute.propTypes = {
   verifyUseraccessToken: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  { verifyUseraccessToken }
-)(UnAuthorizedRoute);
+export default withRouter(
+  connect(
+    null,
+    { verifyUseraccessToken }
+  )(UnAuthorizedRoute)
+);

@@ -2,13 +2,23 @@ import React, { Component } from 'react';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 // import components
 import HomeHeader from '../Layouts/Headers/HomeHeader';
 import UserProfile from '../Layouts/HomePage/UserProfile';
 import UserDetails from '../Layouts/HomePage/UserDetails';
 
+// import redux actions
+import { setSearchUserFalse } from '../../store/actions/applicationStateActions';
+
 class HomeScreen extends Component {
+  componentWillMount() {
+    this.props.setSearchUserFalse();
+  }
+
   render() {
     return (
       <Box
@@ -40,4 +50,14 @@ class HomeScreen extends Component {
     );
   }
 }
-export default HomeScreen;
+
+HomeScreen.propTypes = {
+  setSearchUserFalse: PropTypes.func.isRequired
+};
+
+export default withRouter(
+  connect(
+    null,
+    { setSearchUserFalse }
+  )(HomeScreen)
+);

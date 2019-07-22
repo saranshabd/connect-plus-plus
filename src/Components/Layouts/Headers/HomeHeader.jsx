@@ -74,16 +74,7 @@ function HomeHeader(props) {
                 <Typography variant='h4'>Connect++</Typography>
               </IconButton>
             </Box>
-            <SearchBar />
-            {/* <IconButton
-              aria-label='Account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
-              onClick={handleOnSearch}
-              color='inherit'
-            >
-              <SearchButton />
-            </IconButton> */}
+            <SearchBar history={props.history} />
             <IconButton
               aria-label='Account of current user'
               aria-controls='menu-appbar'

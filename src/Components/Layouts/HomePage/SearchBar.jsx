@@ -8,10 +8,15 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import Card from '@material-ui/core/Card';
 import { fade, makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import AccountCicle from '@material-ui/icons/AccountCircle';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { APP_COLOR } from '../../../constants/app';
 import { decryptStr } from '../../../Utils/string';
+import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -217,9 +222,42 @@ function IntegrationAutosuggest(props) {
                 <Card
                   square
                   style={{ padding: 20, flex: 1 }}
-                  onClick={() => alert(suggestion.fullname)}
+                  onClick={() =>
+                    props.history.push({
+                      pathname: `/search/user/${suggestion.regno}`,
+                      state: { regno: suggestion.regno }
+                    })
+                  }
                 >
-                  {suggestion.fullname}
+                  <Grid container direction='row'>
+                    <Grid item xs={4} sm={4}>
+                      {suggestion.profilePhoto ? (
+                        <Avatar
+                          alt='Remy Sharp'
+                          src={suggestion.profilePhoto}
+                          style={{
+                            width: 70,
+                            height: 70
+                          }}
+                        />
+                      ) : (
+                        <AccountCicle
+                          style={{
+                            color: APP_COLOR,
+                            width: 70,
+                            height: 70
+                          }}
+                        />
+                      )}
+                    </Grid>
+                    <Grid item xs={8} sm={8}>
+                      <span style={{ fontSize: 20 }}>
+                        {suggestion.fullname}
+                      </span>
+                      <br />
+                      <span>{suggestion.regno}</span>
+                    </Grid>
+                  </Grid>
                 </Card>
               </a>
             );
@@ -240,13 +278,20 @@ class Search extends Component {
       this.state.users.push({
         fullname: `${this.props.users[i].firstname} ${
           this.props.users[i].lastname
-        }`
+        }`,
+        regno: this.props.users[i].regno,
+        profilePhoto: this.props.users[i].profilePhoto
       });
     }
   }
 
   render() {
-    return <IntegrationAutosuggest users={this.state.users} />;
+    return (
+      <IntegrationAutosuggest
+        users={this.state.users}
+        history={this.props.history}
+      />
+    );
   }
 }
 
@@ -257,10 +302,12 @@ Search.propTypes = {
 
 const mapStateToProps = state => ({
   useraccesstoken: state.auth.useraccesstoken,
-  users: JSON.parse(decryptStr(state.search)).users
+  users: JSON.parse(decryptStr(state.search.users)).users
 });
 
-export default connect(
-  mapStateToProps,
-  null
-)(Search);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    null
+  )(Search)
+);

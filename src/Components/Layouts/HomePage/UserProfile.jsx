@@ -10,6 +10,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -21,6 +22,8 @@ import { isEmptyString } from '../../../Utils/string';
 
 class UserProfile extends Component {
   state = {
+    // editing mode
+    enableEditing: !this.props.searchUser,
     editBranch: false,
     branch: undefined,
     editJoiningYear: false,
@@ -60,14 +63,28 @@ class UserProfile extends Component {
   };
 
   render() {
-    const {
-      firstname,
-      lastname,
-      regno,
-      profilePhotoUrl: profilePhotoVal,
-      branch: branchVal,
-      joiningYear: joiningYearVal
-    } = this.props;
+    let firstname = null;
+    let lastname = null;
+    let regno = null;
+    let profilePhotoVal = null;
+    let branchVal = null;
+    let joiningYearVal = null;
+
+    if (!this.props.searchUser) {
+      firstname = this.props.firstname;
+      lastname = this.props.lastname;
+      regno = this.props.regno;
+      profilePhotoVal = this.props.profilePhotoUrl;
+      branchVal = this.props.branch;
+      joiningYearVal = this.props.joiningYear;
+    } else {
+      firstname = this.props.searchProfile.firstname;
+      lastname = this.props.searchProfile.lastname;
+      regno = this.props.searchProfile.regno;
+      profilePhotoVal = this.props.searchProfile.profilePhotoUrl;
+      branchVal = this.props.searchProfile.branch;
+      joiningYearVal = this.props.searchProfile.joiningYear;
+    }
 
     const { editBranch, editJoiningYear } = this.state;
 
@@ -137,9 +154,11 @@ class UserProfile extends Component {
                   Branch : <span style={{ color: 'red' }}>Nil</span>
                 </span>
               )}
-              <IconButton onClick={() => this.setState({ editBranch: true })}>
-                <EditIcon />
-              </IconButton>
+              {this.state.enableEditing ? (
+                <IconButton onClick={() => this.setState({ editBranch: true })}>
+                  <EditIcon />
+                </IconButton>
+              ) : null}
             </span>
           )}
         </Typography>
@@ -172,11 +191,13 @@ class UserProfile extends Component {
               ) : (
                 <span style={{ color: 'red' }}>Nil</span>
               )}
-              <IconButton
-                onClick={() => this.setState({ editJoiningYear: true })}
-              >
-                <EditIcon />
-              </IconButton>
+              {this.state.enableEditing ? (
+                <IconButton
+                  onClick={() => this.setState({ editJoiningYear: true })}
+                >
+                  <EditIcon />
+                </IconButton>
+              ) : null}
             </span>
           )}
         </Typography>
@@ -209,7 +230,8 @@ UserProfile.propTypes = {
   regno: PropTypes.string.isRequired,
   profilePhotoUrl: PropTypes.string.isRequired,
   branch: PropTypes.string.isRequired,
-  joiningYear: PropTypes.string.isRequired
+  joiningYear: PropTypes.string.isRequired,
+  searchUser: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -219,10 +241,14 @@ const mapStateToProps = state => ({
   regno: state.publicProfile.regno,
   profilePhotoUrl: state.publicProfile.profilePhotoUrl,
   branch: state.publicProfile.branch,
-  joiningYear: state.publicProfile.joiningYear
+  joiningYear: state.publicProfile.joiningYear,
+  searchUser: state.applicationState.searchUser,
+  searchProfile: state.search.public
 });
 
-export default connect(
-  mapStateToProps,
-  { updatePublicProfile }
-)(UserProfile);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { updatePublicProfile }
+  )(UserProfile)
+);

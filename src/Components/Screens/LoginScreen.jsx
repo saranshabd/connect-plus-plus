@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -284,7 +285,9 @@ const mapStateToProps = state => ({
   message: state.auth.message
 });
 
-export default connect(
-  mapStateToProps,
-  { loginAction }
-)(LoginScreen);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { loginAction }
+  )(LoginScreen)
+);

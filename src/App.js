@@ -17,6 +17,7 @@ import SignUpScreen from './Components/Screens/SignUpScreen';
 import ForgotPasswordScreen from './Components/Screens/ForgotPasswordScreen';
 import NotFoundScreen from './Components/Screens/NotFoundScreen';
 import HomeScreen from './Components/Screens/HomeScreen';
+import SearchedUser from './Components/Screens/SearchedUser';
 
 // import app-color
 import { APP_COLOR } from './constants/app';
@@ -48,6 +49,11 @@ class App extends Component {
                 component={ForgotPasswordScreen}
               />
               <AuthorizedRoute exact path='/home' component={HomeScreen} />
+              <AuthorizedRoute
+                exact
+                path='/search/user/:regno'
+                component={SearchedUser}
+              />
               <Route component={NotFoundScreen} />
             </Switch>
           </ThemeProvider>
