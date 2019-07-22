@@ -23,6 +23,7 @@ import LoginHeader from '../Layouts/Headers/LoginHeader';
 
 // import utils
 import { isEmptyString, checkRegno, validateName } from '../../Utils/string';
+import { Grid } from '@material-ui/core';
 
 class SignUpScreen extends Component {
   state = {
@@ -331,109 +332,115 @@ class SignUpScreen extends Component {
           title='Already a User? Login'
         />
         <Container>
-          <Box component='div' style={{ padding: 50 }}>
-            <form>
-              <Paper style={{ padding: 20 }}>
-                <TextField
-                  id='outlined-text-input'
-                  fullWidth
-                  disabled={isOtpSent}
-                  label='First Name'
-                  type='text'
-                  name='firstname'
-                  value={this.state.firstname}
-                  error={isFirstnameError}
-                  helperText={firstnameError}
-                  onChange={e => this.handleOnChangeFirstname(e)}
-                  margin='normal'
-                  variant='outlined'
-                />
-                <TextField
-                  id='outlined-text-input'
-                  fullWidth
-                  disabled={isOtpSent}
-                  label='Last Name'
-                  type='text'
-                  name='lastname'
-                  value={this.state.lastname}
-                  error={isLastnameError}
-                  helperText={lastnameError}
-                  onChange={e => this.handleOnChangeLastname(e)}
-                  margin='normal'
-                  variant='outlined'
-                />
-                <TextField
-                  id='outlined-number-input'
-                  fullWidth
-                  disabled={isOtpSent}
-                  label='Registration Number'
-                  type='text'
-                  name='regno'
-                  value={this.state.regno}
-                  error={isRegnoError}
-                  helperText={regnoError}
-                  onChange={e => this.handleOnRegnoChange(e)}
-                  margin='normal'
-                  variant='outlined'
-                />
-                <TextField
-                  id='outlined-password-input'
-                  fullWidth
-                  disabled={isOtpSent}
-                  name='password'
-                  label='Password'
-                  type='password'
-                  value={this.state.password}
-                  error={isPasswordError}
-                  helperText={passwordError}
-                  onChange={e => this.handleOnPasswordChange(e)}
-                  margin='normal'
-                  variant='outlined'
-                />
-                <TextField
-                  id='outlined-password-input'
-                  fullWidth
-                  disabled={isOtpSent}
-                  name='confirmPassword'
-                  label='Confirm Password'
-                  value={this.state.confirmPassword}
-                  error={isConfirmPasswordError}
-                  helperText={confirmPasswordError}
-                  onChange={e => this.handleOnConfirmPasswordChange(e)}
-                  type='password'
-                  margin='normal'
-                  variant='outlined'
-                />
-                {isOtpSent ? (
-                  <TextField
-                    id='outlined-text-input'
-                    fullWidth
-                    label='Enter OTP sent to your email'
-                    type='text'
-                    name='otp'
-                    value={this.state.otp}
-                    error={isOtpError}
-                    helperText={otpError}
-                    onChange={e => this.handleOnOtpChange(e)}
-                    margin='normal'
-                    variant='outlined'
-                  />
-                ) : null}
-                {this.state.spinner ? (
-                  <CircularProgress color='secondary' />
-                ) : null}
-                <br />
-                <br />
-                <Button
-                  onClick={() => this.handleOnSubmit()}
-                  variant='contained'
-                  color='primary'
-                  fullWidth
-                >
-                  {buttonTitle}
-                </Button>
-              </Paper>
-            </form>
+          <Box component='div' style={{ paddingTop: 20 }}>
+            <Grid container>
+              <Grid item xs={0} sm={3} />
+              <Grid item xs={12} sm={6}>
+                <form>
+                  <Paper style={{ padding: 20 }}>
+                    <TextField
+                      id='outlined-text-input'
+                      fullWidth
+                      disabled={isOtpSent}
+                      label='First Name'
+                      type='text'
+                      name='firstname'
+                      value={this.state.firstname}
+                      error={isFirstnameError}
+                      helperText={firstnameError}
+                      onChange={e => this.handleOnChangeFirstname(e)}
+                      margin='normal'
+                      variant='outlined'
+                    />
+                    <TextField
+                      id='outlined-text-input'
+                      fullWidth
+                      disabled={isOtpSent}
+                      label='Last Name'
+                      type='text'
+                      name='lastname'
+                      value={this.state.lastname}
+                      error={isLastnameError}
+                      helperText={lastnameError}
+                      onChange={e => this.handleOnChangeLastname(e)}
+                      margin='normal'
+                      variant='outlined'
+                    />
+                    <TextField
+                      id='outlined-number-input'
+                      fullWidth
+                      disabled={isOtpSent}
+                      label='Registration Number'
+                      type='text'
+                      name='regno'
+                      value={this.state.regno}
+                      error={isRegnoError}
+                      helperText={regnoError}
+                      onChange={e => this.handleOnRegnoChange(e)}
+                      margin='normal'
+                      variant='outlined'
+                    />
+                    <TextField
+                      id='outlined-password-input'
+                      fullWidth
+                      disabled={isOtpSent}
+                      name='password'
+                      label='Password'
+                      type='password'
+                      value={this.state.password}
+                      error={isPasswordError}
+                      helperText={passwordError}
+                      onChange={e => this.handleOnPasswordChange(e)}
+                      margin='normal'
+                      variant='outlined'
+                    />
+                    <TextField
+                      id='outlined-password-input'
+                      fullWidth
+                      disabled={isOtpSent}
+                      name='confirmPassword'
+                      label='Confirm Password'
+                      value={this.state.confirmPassword}
+                      error={isConfirmPasswordError}
+                      helperText={confirmPasswordError}
+                      onChange={e => this.handleOnConfirmPasswordChange(e)}
+                      type='password'
+                      margin='normal'
+                      variant='outlined'
+                    />
+                    {isOtpSent ? (
+                      <TextField
+                        id='outlined-text-input'
+                        fullWidth
+                        label='Enter OTP sent to your email'
+                        type='text'
+                        name='otp'
+                        value={this.state.otp}
+                        error={isOtpError}
+                        helperText={otpError}
+                        onChange={e => this.handleOnOtpChange(e)}
+                        margin='normal'
+                        variant='outlined'
+                      />
+                    ) : null}
+                    {this.state.spinner ? (
+                      <CircularProgress color='secondary' />
+                    ) : null}
+                    <br />
+                    <br />
+                    <Button
+                      onClick={() => this.handleOnSubmit()}
+                      variant='contained'
+                      color='primary'
+                      fullWidth
+                    >
+                      {buttonTitle}
+                    </Button>
+                  </Paper>
+                </form>
+              </Grid>
+              <Grid item xs={0} sm={3} />
+            </Grid>
             <Snackbar
               open={isOtpVerified}
               message='Accont Created Successfully'

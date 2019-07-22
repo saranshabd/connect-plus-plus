@@ -129,39 +129,10 @@ class LoginScreen extends Component {
         <Container>
           <Box component='div'>
             <Grid container direction='row' style={{ marginTop: 10 }}>
-              <Grid item xs={1} />
-              <Grid item xs={6} style={{ padding: 20 }}>
-                <Typography variant='h4'>
-                  First time here? Let us explain what exactly we do.
-                </Typography>
-                <br />
-                <Typography>
-                  Connect++ is developed in an effort to connect the coders of
-                  MUJ, so that they can finally have a platform where every
-                  coder can put up their profile which might benefit the others
-                  who are begining their journey to the same path.
-                </Typography>
-                <br />
-                <Typography>
-                  When you were getting started with a new field, say Machine
-                  Learning, did you see around yourself and wondered how are
-                  others doing it? I wonder where did he learn this technology
-                  from? Or, this course on Udemy is highly rated but is it good
-                  for me, did others around me also did this course?
-                </Typography>
-                <br />
-                <Typography>
-                  If yes, then this is the perfect platform for you. And if no,
-                  then there are others who answered this question as yes.
-                  Technology is a waste without community. Help others by
-                  telling what things who've learnt and where did you learn them
-                  from.
-                </Typography>
-              </Grid>
-              <Grid item xs={1} />
               <Grid
                 item
-                xs={4}
+                xs={12}
+                sm={4}
                 direction='row'
                 justify='center'
                 alignContent='center'
@@ -217,14 +188,39 @@ class LoginScreen extends Component {
                   </Paper>
                 </form>
               </Grid>
+              <Grid item xs={12} sm={8} style={{ padding: 20 }}>
+                <Typography variant='h4'>
+                  First time here? Let us explain what exactly we do.
+                </Typography>
+                <br />
+                <Typography>
+                  Connect++ is developed in an effort to connect the coders of
+                  MUJ, so that they can finally have a platform where every
+                  coder can put up their profile which might benefit the others
+                  who are begining their journey to the same path.
+                </Typography>
+                <br />
+                <Typography>
+                  When you were getting started with a new field, say Machine
+                  Learning, did you see around yourself and wondered how are
+                  others doing it? I wonder where did he learn this technology
+                  from? Or, this course on Udemy is highly rated but is it good
+                  for me, did others around me also did this course?
+                </Typography>
+                <br />
+                <Typography>
+                  If yes, then this is the perfect platform for you. And if no,
+                  then there are others who answered this question as yes.
+                  Technology is a waste without community. Help others by
+                  telling what things who've learnt and where did you learn them
+                  from.
+                </Typography>
+              </Grid>
             </Grid>
             <br />
             <br />
             <br />
-            <Box
-              component='div'
-              // style={{ paddingLeft: 200, paddingRight: 200 }}
-            >
+            <Box component='div'>
               <Typography variant='h4' align='center'>
                 Want to contribute to Connect++?
               </Typography>
