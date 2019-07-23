@@ -18,7 +18,7 @@ import { decryptStr } from '../../Utils/string';
 export const getPublicProfile = useraccesstoken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/public`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/profile/public`, {
         params: {
           token: decryptStr(useraccesstoken)
         }
@@ -59,7 +59,7 @@ export const updatePublicProfile = (
 ) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/public`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/profile/public`, {
         token: decryptStr(useraccesstoken),
         ...toBeUpdate
       })
@@ -78,7 +78,7 @@ export const updatePublicProfile = (
 export const getProjects = useraccesstoken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/projects`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/profile/projects`, {
         params: {
           token: decryptStr(useraccesstoken)
         }
@@ -102,7 +102,7 @@ export const getProjects = useraccesstoken => dispatch => {
 export const addProjects = (useraccesstoken, project) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/projects/add`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/profile/projects/add`, {
         token: decryptStr(useraccesstoken),
         ...project
       })
@@ -119,7 +119,7 @@ export const addProjects = (useraccesstoken, project) => dispatch => {
 export const deleteProject = (useraccesstoken, project_id) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .delete(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/projects`, {
+      .delete(`${process.env.REACT_APP_SERVER_URL}/profile/projects`, {
         data: {
           token: decryptStr(useraccesstoken),
           project_id
@@ -138,7 +138,7 @@ export const deleteProject = (useraccesstoken, project_id) => dispatch => {
 export const getCompetitiveProgrammingProfile = useraccesstoken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/programming`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/profile/programming`, {
         params: {
           token: decryptStr(useraccesstoken)
         }
@@ -179,7 +179,7 @@ export const updateCompetitiveProgrammingWebsite = (
 ) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/programming`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/profile/programming`, {
         token: decryptStr(useraccesstoken),
         ...toBeUpdate
       })
@@ -196,7 +196,7 @@ export const updateCompetitiveProgrammingWebsite = (
 export const getTechUsed = useraccesstoken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/tech`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/profile/tech`, {
         params: {
           token: decryptStr(useraccesstoken)
         }
@@ -220,7 +220,7 @@ export const getTechUsed = useraccesstoken => dispatch => {
 export const deleteTechUsed = (useraccesstoken, tech_id) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .delete(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/tech`, {
+      .delete(`${process.env.REACT_APP_SERVER_URL}/profile/tech`, {
         data: {
           token: decryptStr(useraccesstoken),
           tech_id
@@ -239,7 +239,7 @@ export const deleteTechUsed = (useraccesstoken, tech_id) => dispatch => {
 export const addTechUsed = (useraccesstoken, tech) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/profile/tech/add`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/profile/tech/add`, {
         token: decryptStr(useraccesstoken),
         ...tech
       })

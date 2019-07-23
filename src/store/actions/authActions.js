@@ -17,7 +17,7 @@ import {
 export const verifyUseraccessToken = useraccesstoken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/auth`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth`, {
         token: useraccesstoken
       })
       .then(() => {
@@ -39,7 +39,7 @@ export const verifyUseraccessToken = useraccesstoken => dispatch => {
 export const loginAction = (regno, password) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/auth/login`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/login`, {
         regno,
         password
       })
@@ -82,7 +82,7 @@ export const signUpAction = (
 ) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/auth/sign-up`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/sign-up`, {
         firstname,
         lastname,
         regno,
@@ -115,7 +115,7 @@ export const signUpAction = (
 export const signUpVerifyAction = (signUpAccessToken, otp) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/auth/sign-up/verify`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/sign-up/verify`, {
         token: decryptStr(signUpAccessToken),
         otp
       })
@@ -154,7 +154,7 @@ export const signUpVerifyAction = (signUpAccessToken, otp) => dispatch => {
 export const forgotPasswordAction = regno => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${process.env.REACT_APP_DEV_SERVER_URL}/auth/forgot-password`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/forgot-password`, {
         regno
       })
       .then(response => {
@@ -188,13 +188,10 @@ export const forgotPasswordVerifyAction = (
 ) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(
-        `${process.env.REACT_APP_DEV_SERVER_URL}/auth/forgot-password/verify`,
-        {
-          token: decryptStr(forgotPasswordAccessToken),
-          otp
-        }
-      )
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/forgot-password/verify`, {
+        token: decryptStr(forgotPasswordAccessToken),
+        otp
+      })
       .then(response => {
         // user otp verified
         dispatch({
@@ -228,13 +225,10 @@ export const forgotPasswordUpdateAction = (
 ) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .post(
-        `${process.env.REACT_APP_DEV_SERVER_URL}/auth/forgot-password/update`,
-        {
-          token: decryptStr(forgotPasswordVerifyAccessToken),
-          password
-        }
-      )
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/forgot-password/update`, {
+        token: decryptStr(forgotPasswordVerifyAccessToken),
+        password
+      })
       .then(response => {
         // user password changed
         dispatch({

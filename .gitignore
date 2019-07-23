@@ -12,7 +12,7 @@ package-lock.json
 
 # misc
 .DS_Store
-.env.development
+.env.*
 
 npm-debug.log*
 yarn-debug.log*

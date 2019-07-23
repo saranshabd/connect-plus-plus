@@ -86,7 +86,8 @@ class CompetitiveProgrammingExpansionPanel extends Component {
         ...obj
       })
       .then(() => {
-        window.location.reload();
+        // window.location.reload();
+        this.forceUpdate();
       })
       .catch(() => {
         this.setState({

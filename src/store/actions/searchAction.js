@@ -15,14 +15,11 @@ import {
 export const cacheAllUsers = useraccesstoken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .get(
-        `${process.env.REACT_APP_DEV_SERVER_URL}/search/text-match/get-all`,
-        {
-          params: {
-            token: decryptStr(useraccesstoken)
-          }
+      .get(`${process.env.REACT_APP_SERVER_URL}/search/text-match/get-all`, {
+        params: {
+          token: decryptStr(useraccesstoken)
         }
-      )
+      })
       .then(result => {
         dispatch({
           type: CACHE_ALL_USERS,
@@ -42,15 +39,12 @@ export const getSearchAccessTokenValue = () => searchAccessToken;
 export const getSearchAccessToken = (useraccesstoken, regno) => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .get(
-        `${process.env.REACT_APP_DEV_SERVER_URL}/search/text-match/user/regno`,
-        {
-          params: {
-            token: decryptStr(useraccesstoken),
-            regno
-          }
+      .get(`${process.env.REACT_APP_SERVER_URL}/search/text-match/user/regno`, {
+        params: {
+          token: decryptStr(useraccesstoken),
+          regno
         }
-      )
+      })
       .then(data => {
         dispatch({
           type: GET_SEARCH_ACCESS_TOKEN,
@@ -70,7 +64,7 @@ export const getSearchAccessToken = (useraccesstoken, regno) => dispatch => {
 export const getPublicProfile = searchAccessToken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${process.env.REACT_APP_DEV_SERVER_URL}/search/profiles/public`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/search/profiles/public`, {
         params: {
           token: decryptStr(searchAccessToken)
         }
@@ -91,7 +85,7 @@ export const getPublicProfile = searchAccessToken => dispatch => {
 export const getProjects = searchAccessToken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${process.env.REACT_APP_DEV_SERVER_URL}/search/profiles/projects`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/search/profiles/projects`, {
         params: {
           token: decryptStr(searchAccessToken)
         }
@@ -112,14 +106,11 @@ export const getProjects = searchAccessToken => dispatch => {
 export const getProgrammingProfile = searchAccessToken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .get(
-        `${process.env.REACT_APP_DEV_SERVER_URL}/search/profiles/programming`,
-        {
-          params: {
-            token: decryptStr(searchAccessToken)
-          }
+      .get(`${process.env.REACT_APP_SERVER_URL}/search/profiles/programming`, {
+        params: {
+          token: decryptStr(searchAccessToken)
         }
-      )
+      })
       .then(data => {
         dispatch({
           type: SEARCHED_USER_GET_COMPETITIVE_PROGRAMMING,
@@ -136,7 +127,7 @@ export const getProgrammingProfile = searchAccessToken => dispatch => {
 export const getTechUsed = searchAccessToken => dispatch => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${process.env.REACT_APP_DEV_SERVER_URL}/search/profiles/tech`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/search/profiles/tech`, {
         params: {
           token: decryptStr(searchAccessToken)
         }

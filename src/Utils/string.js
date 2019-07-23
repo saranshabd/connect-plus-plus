@@ -37,11 +37,11 @@ export const validateName = name => {
 };
 
 export const encryptStr = str => {
-  return cryptoJs.AES.encrypt(str, process.env.REACT_APP_DEV_SECRET);
+  return cryptoJs.AES.encrypt(str, process.env.REACT_APP_SECRET);
 };
 
 export const decryptStr = str => {
-  return cryptoJs.AES.decrypt(str, process.env.REACT_APP_DEV_SECRET).toString(
+  return cryptoJs.AES.decrypt(str, process.env.REACT_APP_SECRET).toString(
     cryptoJs.enc.Utf8
   );
 };
