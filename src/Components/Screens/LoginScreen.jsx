@@ -103,7 +103,7 @@ class LoginScreen extends Component {
             this.setState({ isPasswordError: false, passwordError: null });
           }, 3000);
         } else {
-          alert(message);
+          // alert(message);
         }
       });
   };

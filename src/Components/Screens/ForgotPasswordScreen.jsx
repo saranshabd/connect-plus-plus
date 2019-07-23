@@ -242,7 +242,7 @@ class ForgotPassword extends Component {
       })
       .catch(() => {
         this.setState({ spinner: false });
-        alert(this.props.message);
+        // alert(this.props.message);
       });
   };
 

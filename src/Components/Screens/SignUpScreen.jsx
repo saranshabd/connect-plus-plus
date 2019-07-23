@@ -247,7 +247,7 @@ class SignUpScreen extends Component {
               });
             }, 3000);
           } else {
-            alert(message);
+            // alert(message);
           }
         });
     } else {
